@@ -1,7 +1,7 @@
 package ioseek
 
 import (
-	_ "ioseek.cn/ioseek/task"
+	_ "github.com/pmeta/ioseek/task"
 )
 
 func init() {
