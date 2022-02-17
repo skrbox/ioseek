@@ -2,17 +2,18 @@ package main
 
 import (
 	"fmt"
+	"runtime"
+
 	_ "github.com/pmeta/ioseek/task"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
-	"runtime"
 )
 
 func init() {
 
 }
 
-// 项目元信息
 var (
+	// 项目元信息
 	webpage  = "https://ioseek.cn/"
 	app      = "ioseek"
 	commitId string
@@ -21,6 +22,7 @@ var (
 	branch   string
 	platform = fmt.Sprintf("%s/%s %s", runtime.GOOS, runtime.GOARCH, runtime.Version())
 
+	//项目启动时配置
 	webListenAddr  = kingpin.Flag("meta.listen-addr", "监听地址").Default(":80").String()
 	metaConfigFile = kingpin.Flag("meta.config-file", "配置文件路径").Default("ioseek.yml").String()
 )
