@@ -1,4 +1,4 @@
-module github.com/pmeta/ioseek
+module github.com/skrbox/ioseek
 
 go 1.17
 
