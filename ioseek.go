@@ -1,33 +1,43 @@
 package main
 
 import (
-	"fmt"
-	"runtime"
+	"os"
 
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
+	"github.com/gin-gonic/gin"
 
-	_ "github.com/skrbox/ioseek/task"
+	"github.com/skrbox/ioseek/handler"
+	v1 "github.com/skrbox/ioseek/handler/api/v1"
+	v2 "github.com/skrbox/ioseek/handler/api/v2"
+	"github.com/skrbox/ioseek/handler/middle"
+	"github.com/skrbox/ioseek/handler/view"
+	_ "github.com/skrbox/ioseek/model"
+	c "github.com/skrbox/ioseek/pkg/conf"
+	. "github.com/skrbox/ioseek/pkg/log"
+	_ "github.com/skrbox/ioseek/pkg/task"
 )
 
 func init() {
-
+	gin.SetMode(gin.ReleaseMode)
+	gin.DisableConsoleColor()
 }
 
-var (
-	// 项目元信息
-	webpage  = "https://ioseek.cn/"
-	app      = "ioseek"
-	commitId string
-	version  string
-	buildAt  string
-	branch   string
-	platform = fmt.Sprintf("%s/%s %s", runtime.GOOS, runtime.GOARCH, runtime.Version())
-
-	// 项目启动时配置
-	webListenAddr  = kingpin.Flag("meta.listen-addr", "监听地址").Default(":80").String()
-	metaConfigFile = kingpin.Flag("meta.config-file", "配置文件路径").Default("ioseek.yml").String()
-)
-
 func main() {
-
+	L.Infof("系统应用启动: %s", *c.MetaListenAddr)
+	router := gin.New()
+	router.LoadHTMLGlob("ui/*.html")
+	middle.Registry(router)
+	{
+		router.HandleMethodNotAllowed = true
+		router.NoRoute(handler.Handle404)
+		router.NoMethod(handler.Handle405)
+		root := router.Group(handler.U("/"))
+		handler.Registry(root)
+		view.Registry(root)
+		v1.Registry(router.Group(handler.U("/api/v1")))
+		v2.Registry(router.Group(handler.U("/api/v2")))
+	}
+	if err := router.Run(*c.MetaListenAddr); err != nil {
+		L.Error(err)
+		os.Exit(1)
+	}
 }

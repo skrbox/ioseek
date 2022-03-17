@@ -12,13 +12,11 @@ all: image pkg
 
 .phony: binary
 binary: init
-	export GOOS=linux
-	export GOPROXY=https://goproxy.cn,direct
-	go build -ldflags " \
-		-X 'main.commitId=${commitId}' \
-		-X 'main.branch=${branch}' \
-		-X 'main.version=${version}' \
-		-X 'main.buildAt=${buildTime}' \
+	CGO_ENABLED=1; go build -ldflags " \
+		-X 'github.com/skrbox/ioseek/pkg/conf.MetaCommitId=${commitId}' \
+		-X 'github.com/skrbox/ioseek/pkg/conf.MetaBranch=${branch}' \
+		-X 'github.com/skrbox/ioseek/pkg/conf.MetaVersion=${version}' \
+		-X 'github.com/skrbox/ioseek/pkg/conf.MetaBuildAt=${buildTime}' \
 	" \
 	-o _output/ioseek ioseek.go
 
