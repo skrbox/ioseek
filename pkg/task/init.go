@@ -3,10 +3,16 @@ package task
 import (
 	"time"
 
-	c "github.com/skrbox/ioseek/pkg/conf"
+	cron "github.com/robfig/cron/v3"
+
+	"github.com/skrbox/ioseek/pkg/conf"
+	. "github.com/skrbox/ioseek/pkg/log"
 )
 
+var T = cron.New(cron.WithLocation(time.Local), cron.WithLogger(CL))
+
 func init() {
-	// 定时同步文章信息
-	go syncLoop(time.Minute * time.Duration(*c.TaskSyncInterval))
+	syncNew(time.Minute * time.Duration(*conf.TaskSyncNewInterval))
+	_, _ = T.AddFunc(conf.Spec[*conf.TaskSyncFullInterval], syncFull)
+	_, _ = T.AddFunc(conf.RecommendMonthly, recommend)
 }

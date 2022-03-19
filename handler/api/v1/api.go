@@ -5,5 +5,7 @@ import (
 )
 
 func Registry(r *gin.RouterGroup) {
-	r.GET("/session", handleSession)
+	r.POST("/session", handleSession)
+	r.GET("/target", handleTarget)
+	r.POST("/alert", handleAlert)
 }
