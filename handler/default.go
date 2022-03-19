@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"fmt"
 	"path"
+	"sort"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -11,13 +13,14 @@ import (
 
 const (
 	contentType = "content-type"
-	jsonStyle   = "application/json"
+	jsonStyle   = "application/json;"
 	errorHTML   = "error.html"
 )
 
 // 响应对象
-type Response interface {
-	Do()
+type response interface {
+	Do(ctx *gin.Context)
+	WithError(e ApiErr) response
 }
 
 // url 统一处理
@@ -75,7 +78,7 @@ func (j *json) WithData(data interface{}) *json {
 	return j
 }
 
-func (j *json) WithError(e ApiErr) *json {
+func (j *json) WithError(e ApiErr) response {
 	j.WithSucceed(false).WithCode(e.Code).WithMessage(e.Message)
 	return j
 }
@@ -111,9 +114,9 @@ func (h *html) WithCode(code int) *html {
 	return h
 }
 
-func (h *html) WithError(e ApiErr) *html {
+func (h *html) WithError(e ApiErr) response {
 	h.WithTemplate(errorHTML).WithCode(e.Code).WithH(gin.H{
-		"title":   e.Code,
+		"title":   fmt.Sprintf("%d | %s", e.Code, *c.MetaDomain),
 		"code":    e.Code,
 		"message": e.Message,
 	})
@@ -150,33 +153,26 @@ func handleMetrics(c *gin.Context) {
 
 // 服务版本信息查询
 func handleVersion(ctx *gin.Context) {
-	NewJsonResponse().WithData(gin.H{
-		"app":      c.MetaAppName,
-		"version":  c.MetaVersion,
-		"commitId": c.MetaCommitId,
-		"branch":   c.MetaBranch,
-		"buildAt":  c.MetaBuildAt,
-		"platform": c.MetaPlatform,
-		"webPage":  c.MetaWebPage,
-	}).Do(ctx)
+	NewJsonResponse().WithData(c.MetaVersionMap).Do(ctx)
 }
 
 // 全局路由注册信息
 func routerPaths(e *gin.Engine) gin.HandlerFunc {
-	type Path struct {
+	type item struct {
 		Path   string
 		Method string
 	}
 	var (
-		paths  = make([]Path, 0)
+		paths  = make([]item, 0)
 		routes = e.Routes()
 	)
 	for _, route := range routes {
-		paths = append(paths, Path{
+		paths = append(paths, item{
 			Path:   route.Path,
 			Method: route.Method,
 		})
 	}
+	sort.SliceStable(paths, func(i, j int) bool { return paths[i].Path < paths[j].Path })
 	return func(ctx *gin.Context) {
 		NewJsonResponse().WithData(paths).Do(ctx)
 	}
