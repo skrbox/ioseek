@@ -1,0 +1,27 @@
+[Unit]
+Description=基于微信公众号开发的博客系统, 欢迎关注公众号【修齐方法论】
+Documentation=https://docs.ioseek.cn/
+Wants=network-online.target
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/local/bin/ioseek \
+          --meta.listen-addr=:80 \
+          --meta.url-prefix=/ \
+          --meta.domain=ioseek.cn \
+          --db.username=ioseek \
+          --db.password=ioseek.cn \
+          --db.host-port= \
+          --db.database=/opt/ioseek.db \
+          --task.sync-new-interval=60 \
+          --task.sync-full-interval=weekly 
+
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+Alias=ioseek-cn
