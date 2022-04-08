@@ -12,7 +12,7 @@ import (
 
 func init() {
 	kingpin.HelpFlag.Short('h')
-	kingpin.Version(version())
+	kingpin.Version(version()).VersionFlag.Short('v')
 	kingpin.Parse()
 }
 
@@ -21,7 +21,7 @@ var (
 	// meta
 	MetaListenAddr = kingpin.Flag("meta.listen-addr", "监听地址").Default(":80").String()
 	MetaUrlPrefix  = kingpin.Flag("meta.url-prefix", "统一路由前缀").Default("/").String()
-	MetaDomain     = kingpin.Flag("meta.domain", "网站域名").Default("ioseek.cn").String()
+	MetaAppName    = kingpin.Flag("meta.app-name", "应用名称").Default("修齐方法论").String()
 	metaPlatform   = fmt.Sprintf("%s/%s %s", runtime.GOOS, runtime.GOARCH, runtime.Version())
 	metaCommitId   string
 	metaVersion    string

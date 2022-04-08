@@ -51,6 +51,8 @@ func init() {
 }
 
 type meta struct {
-	gorm.Model
-	UUID string `gorm:"primaryKey"`
+	UUID      string `gorm:"primaryKey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt `gorm:"index"`
 }

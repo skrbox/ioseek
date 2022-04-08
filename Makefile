@@ -22,14 +22,13 @@ binary: init
 
 .phony: image
 image:
-	docker build -t ${imageName} --build-arg pkgDir=${pkgDir} .
+	docker build -t ${imageName} --build-arg pkgDir=${pkgDir} --build-arg commitId=${commitId} .
 	docker push ${imageName}
 
 .phony: pkg
 pkg: binary
 	mkdir -p "_output/${pkgDir}"
 	cp _output/ioseek \
-		ioseek.yml \
 		README.md \
 	  	LICENSE \
 	_output/${pkgDir} ; \
