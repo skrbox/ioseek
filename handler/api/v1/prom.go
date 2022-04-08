@@ -10,12 +10,12 @@ import (
 // https://prometheus.io/docs/prometheus/latest/http_sd/
 func handleTarget(ctx *gin.Context) {
 	// todo: ...
-	handler.NewJsonResponse().WithData(make([]string, 0)).Do(ctx)
+	handler.NewJSONResponse().WithData(make([]string, 0)).Do(ctx)
 }
 
 // alertmanager 告警 webhook
 // https://prometheus.io/docs/alerting/latest/configuration/#webhook_config
 func handleAlert(ctx *gin.Context) {
 	// todo: ...
-	handler.NewJsonResponse().WithError(handler.NotCompleted).Do(ctx)
+	handler.NewJSONResponse().WithError(handler.NotCompleted).Do(ctx)
 }

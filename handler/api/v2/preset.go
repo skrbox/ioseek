@@ -8,7 +8,7 @@ import (
 
 // 预留 v2 版本
 func handlePreset(ctx *gin.Context) {
-	handler.NewJsonResponse().WithData(gin.H{
+	handler.NewJSONResponse().WithData(gin.H{
 		"version":    "2",
 		"pathPrefix": "/api/v2/",
 	}).Do(ctx)

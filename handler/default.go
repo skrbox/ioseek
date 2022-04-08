@@ -49,7 +49,7 @@ type json struct {
 }
 
 // 实例化 json 响应
-func NewJsonResponse() *json {
+func NewJSONResponse() *json {
 	return &json{}
 }
 
@@ -116,7 +116,7 @@ func (h *html) WithCode(code int) *html {
 
 func (h *html) WithError(e ApiErr) response {
 	h.WithTemplate(errorHTML).WithCode(e.Code).WithH(gin.H{
-		"title":   fmt.Sprintf("%d | %s", e.Code, *c.MetaDomain),
+		"title":   fmt.Sprintf("%s | %d", *c.MetaAppName, e.Code),
 		"code":    e.Code,
 		"message": e.Message,
 	})
@@ -126,7 +126,7 @@ func (h *html) WithError(e ApiErr) response {
 // 自定义 404 处理
 func Handle404(c *gin.Context) {
 	if strings.Contains(c.GetHeader(contentType), jsonStyle) {
-		NewJsonResponse().WithError(HTTP404).Do(c)
+		NewJSONResponse().WithError(HTTP404).Do(c)
 		return
 	}
 	NewHTMLResponse().WithError(HTTP404).Do(c)
@@ -135,14 +135,14 @@ func Handle404(c *gin.Context) {
 // 自定义 405 处理
 func Handle405(c *gin.Context) {
 	if strings.Contains(c.GetHeader(contentType), jsonStyle) {
-		NewJsonResponse().WithError(HTTP405).Do(c)
+		NewJSONResponse().WithError(HTTP405).Do(c)
 	}
 	NewHTMLResponse().WithError(HTTP405).Do(c)
 }
 
 // 健康状态反馈
 func handlePing(c *gin.Context) {
-	NewJsonResponse().WithSucceed(true).WithMessage("pong").Do(c)
+	NewJSONResponse().WithSucceed(true).WithMessage("pong").Do(c)
 }
 
 // 业务指标暴露: 友链状态，攻击行为等
@@ -153,7 +153,7 @@ func handleMetrics(c *gin.Context) {
 
 // 服务版本信息查询
 func handleVersion(ctx *gin.Context) {
-	NewJsonResponse().WithData(c.MetaVersionMap).Do(ctx)
+	NewJSONResponse().WithData(c.MetaVersionMap).Do(ctx)
 }
 
 // 全局路由注册信息
@@ -174,6 +174,6 @@ func routerPaths(e *gin.Engine) gin.HandlerFunc {
 	}
 	sort.SliceStable(paths, func(i, j int) bool { return paths[i].Path < paths[j].Path })
 	return func(ctx *gin.Context) {
-		NewJsonResponse().WithData(paths).Do(ctx)
+		NewJSONResponse().WithData(paths).Do(ctx)
 	}
 }

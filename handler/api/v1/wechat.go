@@ -9,5 +9,5 @@ import (
 // 微信公众号会话控制
 func handleSession(ctx *gin.Context) {
 	// todo: 会话控制
-	handler.NewJsonResponse().WithError(handler.NotCompleted).Do(ctx)
+	handler.NewJSONResponse().WithError(handler.NotCompleted).Do(ctx)
 }
