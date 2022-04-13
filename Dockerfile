@@ -1,9 +1,10 @@
-FROM --platform=linux/amd64 golang:1.17.7 as builder
+FROM --platform=linux/amd64 golang:1.17.7-alpine3.15 as builder
 ARG buildDir=/Go/src/github.com/skrbox/ioseek
+ARG goProxy=""
 WORKDIR ${buildDir}
 ENV GOPATH=/Go
 ENV GOOS=linux
-ENV GOPROXY=https://goproxy.cn,direct
+ENV GOPROXY=${goProxy}
 COPY . .
 RUN make pkg
 
