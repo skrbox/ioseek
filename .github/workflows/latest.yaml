@@ -19,4 +19,4 @@ jobs:
           AUTH: ${{ secrets.DOCKER_HUB_TOKEN }}
         run: docker login -u jeyrce -p "$AUTH"
       - name: Build the Docker image
-        run: make image version=latest
+        run: make image version=latest branch="$github.ref_name" commitId="$github.sha"
