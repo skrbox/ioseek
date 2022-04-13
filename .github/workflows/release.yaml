@@ -1,0 +1,22 @@
+name: Release Publish
+
+on:
+  push:
+    tags: [ 'v*' ]
+
+env:
+  VERSION: ${{ github.ref_name }}
+  AUTH: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@main
+      - name: Docker Login
+        run: docker login -u jeyrce -p "$AUTH"
+      - name: Image Build and Push
+        run: make image version="$VERSION"
