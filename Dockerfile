@@ -6,7 +6,7 @@ ENV GOPATH=/Go
 ENV GOOS=linux
 ENV GOPROXY=${goProxy}
 COPY . .
-RUN make pkg
+RUN apk add gcc g++ make cmake gfortran libffi-dev openssl-dev libtool && make pkg
 
 FROM --platform=linux/amd64 alpine:3.15.0 as runner
 ARG commitId
