@@ -46,10 +46,9 @@ powered by {{.poweredBy}}
 	}
 
 	// db
-	DBUsername = kingpin.Flag("db.username", "数据库用户名").Default("ioseek").String()
-	DBPassword = kingpin.Flag("db.password", "数据库密码").Default("ioseek.cn").String()
-	DBHostPort = kingpin.Flag("db.host-port", "数据库连接地址，如[127.0.0.1:3306], 当为空时使用sqlite").String()
-	DBDatabase = kingpin.Flag("db.database", "数据库名称, 当hostProt为空则作为sqlite数据库文件").Default("ioseek.db").String()
+	DBUserPass = kingpin.Flag("db.user-pass", "数据库用户名密码").Default("root:ioseek").String()
+	DBHostPort = kingpin.Flag("db.host-port", "数据库连接地址").Default("127.0.0.1:3306").String()
+	DBDatabase = kingpin.Flag("db.database", "数据库名称").Default("ioseek").String()
 
 	// task
 	TaskSyncNewInterval  = kingpin.Flag("task.sync-new-interval", "同步最新文章周期(分钟)").Default("60").Int64()

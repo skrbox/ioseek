@@ -12,7 +12,7 @@ all: image pkg
 
 .phony: binary
 binary: init
-	CGO_ENABLED=1; go build -ldflags " \
+	CGO_ENABLED=0 go build -ldflags " \
 		-X 'github.com/skrbox/ioseek/pkg/conf.metaCommitId=${commitId}' \
 		-X 'github.com/skrbox/ioseek/pkg/conf.metaBranch=${branch}' \
 		-X 'github.com/skrbox/ioseek/pkg/conf.metaVersion=${version}' \

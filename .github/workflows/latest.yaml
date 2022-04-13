@@ -1,0 +1,22 @@
+name: Latest Image Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@main
+      - name: docker login
+        env:
+          AUTH: ${{ secrets.DOCKER_HUB_TOKEN }}
+        run: docker login -u jeyrce -p "$AUTH"
+      - name: Build the Docker image
+        run: make image version=latest

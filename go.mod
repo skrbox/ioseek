@@ -12,7 +12,6 @@ require (
 	go.uber.org/zap v1.21.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gorm.io/driver/mysql v1.3.2
-	gorm.io/driver/sqlite v1.3.1
 	gorm.io/gorm v1.23.2
 )
 
@@ -83,6 +82,7 @@ require (
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gorm.io/driver/postgres v1.3.1 // indirect
+	gorm.io/driver/postgres v1.0.2 // indirect
+	gorm.io/driver/sqlite v1.1.3 // indirect
 	gorm.io/driver/sqlserver v1.3.1 // indirect
 )

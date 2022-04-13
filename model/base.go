@@ -8,7 +8,6 @@ import (
 	"github.com/axiaoxin-com/logging"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 
@@ -19,7 +18,7 @@ import (
 var (
 	DB        *gorm.DB
 	once      sync.Once
-	mysqlTmpl = `%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local`
+	mysqlTmpl = `%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local`
 )
 
 func init() {
@@ -27,10 +26,7 @@ func init() {
 		var driver gorm.Dialector
 		if *c.DBHostPort != "" {
 			L.Infof("初始化数据连接: %s", *c.DBHostPort)
-			driver = mysql.Open(fmt.Sprintf(mysqlTmpl, *c.DBUsername, *c.DBPassword, *c.DBHostPort, *c.DBDatabase))
-		} else {
-			L.Infof("初始化本地数据库: %s", *c.DBDatabase)
-			driver = sqlite.Open(*c.DBDatabase)
+			driver = mysql.Open(fmt.Sprintf(mysqlTmpl, *c.DBUserPass, *c.DBHostPort, *c.DBDatabase))
 		}
 		db, err := gorm.Open(driver, &gorm.Config{
 			Logger:          logging.NewGormLogger(zap.DebugLevel, zap.DebugLevel, time.Millisecond*500),
