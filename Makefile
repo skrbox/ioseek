@@ -22,7 +22,14 @@ binary: init
 
 .phony: image
 image:
-	docker build -t ${imageName} --build-arg pkgDir=${pkgDir} --build-arg commitId=${commitId} .
+	docker buildx rm ioseek
+	docker buildx create --name ioseek --bootstrap --use
+	docker buildx build -t ${imageName} \
+		--build-arg pkgDir=${pkgDir} \
+		--build-arg commitId=${commitId} \
+		--platform linux/amd64,linux/arm64,linux/386,linux/arm/v7 \
+		.
+	
 	docker push ${imageName}
 
 .phony: pkg
