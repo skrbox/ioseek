@@ -1,14 +1,14 @@
-FROM golang:1.17.7-alpine3.15 as builder
+FROM golang:1.18.2 as builder
 ARG buildDir=/Go/src/github.com/skrbox/ioseek
-ARG goProxy=""
+ARG goProxy
 WORKDIR ${buildDir}
 ENV GOPATH=/Go
 ENV GOOS=linux
 ENV GOPROXY=${goProxy}
 COPY . .
-RUN apk add gcc g++ make cmake gfortran libffi-dev openssl-dev libtool && make pkg
+RUN make pkg
 
-FROM alpine:3.15.0 as runner
+FROM alpine:3.15.4 as runner
 ARG commitId
 LABEL author=Jeyrce.Lu<jeyrce@gmail.com> \
       poweredBy=https://github.com/skrbox/ioseek \

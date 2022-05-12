@@ -27,10 +27,10 @@ image:
 	docker buildx build -t ${imageName} \
 		--build-arg pkgDir=${pkgDir} \
 		--build-arg commitId=${commitId} \
-		--platform linux/amd64,linux/arm64,linux/386,linux/arm/v7 \
+		--build-arg goProxy=${goProxy} \
+		--platform linux/386,linux/amd64,linux/arm64 \
+		--push \
 		.
-	
-	docker push ${imageName}
 
 .phony: pkg
 pkg: binary
