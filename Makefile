@@ -22,7 +22,7 @@ binary: init
 
 .phony: image
 image:
-	docker buildx rm ioseek
+	-docker buildx rm ioseek
 	docker buildx create --name ioseek --bootstrap --use
 	docker buildx build -t ${imageName} \
 		--build-arg pkgDir=${pkgDir} \
