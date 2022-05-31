@@ -1,0 +1,26 @@
+# https://prometheus.io/docs/alerting/latest/configuration/
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: ioseek
+  group_by: [ "..." ]
+  group_wait: 30s
+  group_interval: 1m
+  repeat_interval: 3h
+  routes:
+    receiver: ioseek
+    group_by:
+      - group
+    matchers:
+      - group = user
+    group_wait: 30s
+    group_interval: 1m
+    repeat_interval: 6h
+
+receivers:
+  name: ioseek
+  webhook_configs:
+    send_resolved: true
+    url: "http://ioseek/api/v1/alert"
+    max_alerts: 20

@@ -1,0 +1,30 @@
+# https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+global:
+  scrape_interval: 1m
+  scrape_timeout: 20s
+  evaluation_interval: 1m
+  external_labels:
+    app: ioseek
+
+rule_files:
+  - rules.yml
+
+scrape_configs:
+  - job_name: link-probe
+    http_sd_configs:
+      - url: "http://ioseek/api/v1/target/link"
+  - job_name: system-metrics
+    static_configs:
+      - targets:
+          - "http://127.0.0.1/sys/metrics"
+  - job_name: app-metrics
+    static_configs:
+      - targets:
+          - "http://127.0.0.1/app/metrics"
+
+alerting:
+  alertmanagers:
+    - api_version: v2
+      timeout: 10s
+      path_prefix: /
+      scheme: http
