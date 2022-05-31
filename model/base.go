@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	DB        *gorm.DB
+	Tx        *gorm.DB
 	once      sync.Once
 	mysqlTmpl = `%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local`
 )
@@ -42,7 +42,7 @@ func init() {
 		if err != nil {
 			panic(err)
 		}
-		DB = db
+		Tx = db
 	})
 }
 
