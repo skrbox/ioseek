@@ -1,0 +1,26 @@
+# https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+groups:
+  # 系统告警
+  - name: system
+    rules:
+      - alert: http_error_count
+        expr: increase(http_500_error{}[1m]) > 10
+        for: 2m
+        labels:
+          group: system
+        annotations:
+          summary: 资源访问失败次数过多
+          detail: 过去一段时间资源访问失败达{{ $value }}次.
+          send_to: admin,owner
+  # 用户告警
+  - name: user
+    rules:
+      - alert: link_unreachable
+        expr: up{} != 1
+        for: 2m
+        labels:
+          group: user
+        annotations:
+          summary: 网站访问不可达
+          detail: "无法连通网站主页: {{ $labels.target }}"
+          send_to: admin,owner,author     
