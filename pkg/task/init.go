@@ -12,7 +12,7 @@ import (
 var T = cron.New(cron.WithLocation(time.Local), cron.WithLogger(CL))
 
 func init() {
-	syncNew(time.Minute * time.Duration(*conf.TaskSyncNewInterval))
+	go syncNew(time.Minute * time.Duration(*conf.TaskSyncNewInterval))
 	_, _ = T.AddFunc(conf.Spec[*conf.TaskSyncFullInterval], syncFull)
 	_, _ = T.AddFunc(conf.RecommendMonthly, recommend)
 }
