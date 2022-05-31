@@ -14,6 +14,7 @@ func Registry(e *gin.Engine) {
 		cors.Default(),              // 跨域处理
 		seoProxy(),                  // seo 处理
 		analyze(),                   // 统计分析
+		authenticate(),              // 管理操作认证
 		ginprom.PromMiddleware(nil), // 系统指标暴露
 	)
 }
