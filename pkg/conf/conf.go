@@ -51,8 +51,9 @@ powered by {{.poweredBy}}
 	DBDatabase = kingpin.Flag("db.database", "数据库名称").Default("ioseek").String()
 
 	// task
-	TaskSyncNewInterval  = kingpin.Flag("task.sync-new-interval", "同步最新文章周期(分钟)").Default("60").Int64()
-	TaskSyncFullInterval = kingpin.Flag("task.sync-full-interval", "全量同步周期").Default(Weekly).Enum(Daily, Weekly, Monthly)
+	TaskSyncNewInterval   = kingpin.Flag("task.sync-new-interval", "同步最新文章周期(分钟)").Default("60").Int64()
+	TaskSyncFullInterval  = kingpin.Flag("task.sync-full-interval", "全量同步周期").Default(Weekly).Enum(Daily, Weekly, Monthly)
+	TaskBuildRuleInterval = kingpin.Flag("task.build-rule-interval", "告警规则构建周期(分钟)").Default("1").Int64()
 )
 
 // 构建命令行版本输出信息
