@@ -17,5 +17,7 @@ ARG buildDir=/Go/src/github.com/skrbox/ioseek
 ARG pkgDir
 WORKDIR /app
 COPY --from=builder --chown=bin ${buildDir}/_output/${pkgDir}/ .
+COPY deploy/ioseek.yml /etc/ioseek/ioseek.yml
 EXPOSE 80
-CMD ["/app/ioseek"]
+VOLUME ["/etc/ioseek/", "/var/lib/ioseek/"]
+CMD ["/app/ioseek", "--meta.config-file=/etc/ioseek/ioseek.yml"]
