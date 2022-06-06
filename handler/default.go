@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 
 	c "github.com/skrbox/ioseek/pkg/conf"
 )
@@ -25,10 +26,11 @@ type response interface {
 
 // url 统一处理
 func U(url string) string {
-	if *c.MetaUrlPrefix == "" {
-		*c.MetaUrlPrefix = "/"
+	prefix := viper.GetString(c.MetaUrlPrefix)
+	if prefix == "" {
+		prefix = "/"
 	}
-	return path.Join(*c.MetaUrlPrefix, url)
+	return path.Join(prefix, url)
 }
 
 // 应用错误码和状态码关系转换
@@ -116,7 +118,7 @@ func (h *html) WithCode(code int) *html {
 
 func (h *html) WithError(e ApiErr) response {
 	h.WithTemplate(errorHTML).WithCode(e.Code).WithH(gin.H{
-		"title":   fmt.Sprintf("%s | %d", *c.MetaAppName, e.Code),
+		"title":   fmt.Sprintf("%s | %d", viper.GetString(c.MetaAppName), e.Code),
 		"code":    e.Code,
 		"message": e.Message,
 	})
