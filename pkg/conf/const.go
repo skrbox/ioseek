@@ -30,4 +30,11 @@ const (
 
 	TaskSyncNewInterval  = "task.sync-new-interval"
 	TaskSyncFullInterval = "task.sync-full-interval"
+
+	RedisHostPort = "redis.host-port"
+	RedisPassword = "redis.password"
+
+	StorageMediaDir  = "storage.media-dir" // 如果设置了本地目录则不使用对象存储
+	StorageAccessKey = "storage.access-key"
+	StorageSecretKey = "storage.secret-key"
 )

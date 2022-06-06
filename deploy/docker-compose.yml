@@ -42,16 +42,16 @@ services:
   
   redis:
     image: redis:7.0.0-alpine
-    networks: 
+    networks:
       - nginx
     command:
       - "--requirepass"
       - "ioseek.cn"
     logging:
-      options: 
+      options:
         max-size: 10m
         max-file: 3
-    
+  
   prometheus:
     image: prom/prometheus:v2.35.0
     networks:
@@ -98,7 +98,8 @@ services:
       - mysql
       - redis
     volumes:
-      - /etc/ioseek/media/:/etc/ioseek/media/
+      - /etc/ioseek/:/etc/ioseek/
+      - /var/lib/ioseek/:/var/lib/ioseek/
     logging:
       options:
         max-size: 10m

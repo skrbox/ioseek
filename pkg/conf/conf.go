@@ -70,9 +70,18 @@ powered by {{.poweredBy}}
 	_ = pflag.String(DBUserPass, "ioseek:ioseek", "数据库用户:密码")
 	_ = pflag.String(DBDatabase, "ioseek", "数据库名")
 
+	// redis
+	_ = pflag.String(RedisHostPort, "127.0.0.1:6379", "redis主机:端口")
+	_ = pflag.String(RedisPassword, "", "redis密码")
+
 	// task
 	_ = pflag.Int64(TaskSyncNewInterval, 30, "同步最新文章周期(分钟),不得低于10")
 	_ = pflag.String(TaskSyncFullInterval, Weekly, "全量同步周期(daily|weekly|monthly)")
+
+	// storage
+	_ = pflag.String(StorageMediaDir, "", "媒体文件本地目录(如果为空则使用对象存储)")
+	_ = pflag.String(StorageAccessKey, "", "对象存储AK")
+	_ = pflag.String(StorageSecretKey, "", "对象存储SK")
 )
 
 // 构建命令行版本输出信息

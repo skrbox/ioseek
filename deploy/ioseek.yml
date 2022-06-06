@@ -8,9 +8,15 @@ db:
   user-pass: "ioseek:ioseek"
   database: "ioseek"
 
+redis:
+  host-port: "127.0.0.1:6379"
+  password: ""
+
+storage:
+  media-dir: "/var/lib/ioseek/media/"
+  access-key: ""
+  secret-key: ""
+
 task:
   sync-new-interval: 30
-  sync-full-interval: weekly
-
-test:
-  author: jeyrce
+  sync-full-interval: "weekly"
