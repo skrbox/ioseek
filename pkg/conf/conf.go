@@ -4,31 +4,51 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"os"
 	"runtime"
 	"strings"
 
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
+	"github.com/fsnotify/fsnotify"
+	. "github.com/skrbox/ioseek/pkg/log"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 )
 
 func init() {
-	kingpin.HelpFlag.Short('h')
-	kingpin.Version(version()).VersionFlag.Short('v')
-	kingpin.Parse()
+	pflag.Parse()
+	_ = viper.BindPFlags(pflag.CommandLine)
+	if *config != "" {
+		viper.SetConfigFile(*config)
+		viper.WatchConfig()
+		viper.OnConfigChange(func(e fsnotify.Event) {
+			L.Infof("配置文件发生变更: %s", e.String())
+		})
+		if err := viper.ReadInConfig(); err != nil {
+			L.Error(err)
+			os.Exit(1)
+		}
+	}
+	if *showVersion {
+		fmt.Println(version())
+		os.Exit(0)
+	}
 }
 
 // 配置信息集合, 集中式管理配置是为了某些配置可能会被循环导入的情况
 var (
 	// meta
-	MetaListenAddr = kingpin.Flag("meta.listen-addr", "监听地址").Default(":80").String()
-	MetaUrlPrefix  = kingpin.Flag("meta.url-prefix", "统一路由前缀").Default("/").String()
-	MetaAppName    = kingpin.Flag("meta.app-name", "应用名称").Default("修齐方法论").String()
-	metaPlatform   = fmt.Sprintf("%s/%s %s", runtime.GOOS, runtime.GOARCH, runtime.Version())
-	metaCommitId   string
-	metaVersion    string
-	metaBuildAt    string
-	metaBranch     string
-	metaPoweredBy  = `https://github.com/skrbox/ioseek`
-	versionTmpl    = `
+	showVersion   = pflag.BoolP(MetaVersion, "v", false, "查看软件版本")
+	config        = pflag.StringP(MetaConfigFile, "c", "", "配置文件")
+	_             = pflag.String(MetaListenAddr, ":80", "监听地址")
+	_             = pflag.String(MetaUrlPrefix, "/", "统一路由前缀")
+	_             = pflag.String(MetaAppName, "修齐方法论", "应用名称")
+	metaPlatform  = fmt.Sprintf("%s/%s %s", runtime.GOOS, runtime.GOARCH, runtime.Version())
+	metaCommitId  string
+	metaVersion   string
+	metaBuildAt   string
+	metaBranch    string
+	metaPoweredBy = `https://github.com/skrbox/ioseek`
+	versionTmpl   = `
 powered by {{.poweredBy}}
     version:	{{.version}}
     branch:	{{.branch}}
@@ -46,14 +66,13 @@ powered by {{.poweredBy}}
 	}
 
 	// db
-	DBUserPass = kingpin.Flag("db.user-pass", "数据库用户名密码").Default("root:ioseek").String()
-	DBHostPort = kingpin.Flag("db.host-port", "数据库连接地址").Default("127.0.0.1:3306").String()
-	DBDatabase = kingpin.Flag("db.database", "数据库名称").Default("ioseek").String()
+	_ = pflag.String(DBHostPort, "127.0.0.1:3306", "数据库地址:端口")
+	_ = pflag.String(DBUserPass, "ioseek:ioseek", "数据库用户:密码")
+	_ = pflag.String(DBDatabase, "ioseek", "数据库名")
 
 	// task
-	TaskSyncNewInterval   = kingpin.Flag("task.sync-new-interval", "同步最新文章周期(分钟)").Default("60").Int64()
-	TaskSyncFullInterval  = kingpin.Flag("task.sync-full-interval", "全量同步周期").Default(Weekly).Enum(Daily, Weekly, Monthly)
-	TaskBuildRuleInterval = kingpin.Flag("task.build-rule-interval", "告警规则构建周期(分钟)").Default("1").Int64()
+	_ = pflag.Int64(TaskSyncNewInterval, 30, "同步最新文章周期(分钟),不得低于10")
+	_ = pflag.String(TaskSyncFullInterval, Weekly, "全量同步周期(daily|weekly|monthly)")
 )
 
 // 构建命令行版本输出信息

@@ -1,11 +1,5 @@
 package conf
 
-// 日志输出风格
-const (
-	Json = "json"
-	Txt  = "txt"
-)
-
 const (
 	Daily   = "daily"
 	Weekly  = "weekly"
@@ -21,3 +15,19 @@ var Spec = map[string]string{
 
 // 避免打扰到别人，推送时间固定为每月两次
 const RecommendMonthly = `0 10 1,16 * *`
+
+// 配置参数集
+const (
+	MetaVersion    = "version"
+	MetaConfigFile = "meta.config-file"
+	MetaListenAddr = "meta.listen-addr"
+	MetaUrlPrefix  = "meta.url-prefix"
+	MetaAppName    = "meta.app-name"
+
+	DBHostPort = "db.host-port"
+	DBUserPass = "db.user-pass"
+	DBDatabase = "db.database"
+
+	TaskSyncNewInterval  = "task.sync-new-interval"
+	TaskSyncFullInterval = "task.sync-full-interval"
+)
