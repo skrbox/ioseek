@@ -18,6 +18,7 @@ _output/
 *.log
 *.tmp
 *.swap
+*.swp
 .DS_Store
 *.db 
 *.sqlite3
