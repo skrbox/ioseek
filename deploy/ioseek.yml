@@ -1,22 +1,27 @@
+# 基本配置
 meta:
   app-name: "修齐方法论"
   listen-addr: ":80"
   url-prefix: "/ioseek"
 
+# mysql配置
 db:
   host-port: "127.0.0.1:3306"
   user-pass: "ioseek:ioseek"
   database: "ioseek"
 
+# redis配置
 redis:
   host-port: "127.0.0.1:6379"
   password: ""
 
+# 持久化存储配置
 storage:
   media-dir: "/var/lib/ioseek/media/"
   access-key: ""
   secret-key: ""
 
+# 定时任务配置
 task:
   sync-new-interval: 30
   sync-full-interval: "weekly"
